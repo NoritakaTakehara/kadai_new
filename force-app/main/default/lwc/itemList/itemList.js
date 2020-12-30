@@ -5,20 +5,17 @@ import getParentItemList from '@salesforce/apex/ItemList.hoge';
 //export default class ParentItem extends LightningElement {}
 
 const columns = [
-    { label: 'Name', fieldName: 'Name' },
-    // { label: 'Website', fieldName: 'website', type: 'url' },
-    // { label: 'Phone', fieldName: 'phone', type: 'phone' },
-    // { label: 'Balance', fieldName: 'amount', type: 'currency' },
-    // { label: 'CloseAt', fieldName: 'closeAt', type: 'date' },
+    { label: '商品名', fieldName: 'Name' },
+    { label: '数量', fieldName: 'Quantity__c',type: 'number', editable: true },
+    { label: '価格', fieldName: 'Price__c',type: 'currency', editable: true },
+    { label: 'Id', fieldName: 'Id' },
 ];
 
 export default class BasicDatatable extends LightningElement {
     @api recordId;
-    @track data = [
-        {id: '12345678',Name:'タピオカ'},
-        {id: '123456789',Name:'タピオカ'}
-    ];
+    @track data = [];
     columns = columns;
+    rowOffset = 0;
 
     // eslint-disable-next-line @lwc/lwc/no-async-await
     async connectedCallback() {
