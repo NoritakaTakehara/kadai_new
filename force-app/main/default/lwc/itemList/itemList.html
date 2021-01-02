@@ -1,12 +1,17 @@
 <template>
-    <div style="height: 300px;">
+    <div class = "slds-m-around_medium" style="height: 300px;">
         <lightning-datatable
                 key-field="id"
                 data={data}
                 show-row-number-column
                 row-number-offset={rowOffset}
-                suppress-bottom-bar
-                columns={columns}>
+                columns={columns}
+                onsave={handleSave}
+                draft-values={draftValues}>         
         </lightning-datatable>
-    </div>    
+        <!-- <lightning-card>
+            <lightning-button label="キャンセル" title="Non-primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+            <lightning-button variant="brand" label="保存" title="Primary action" onclick={handleSave} class="slds-m-left_x-small"></lightning-button>
+        </lightning-card> -->
+    </div>
 </template>
