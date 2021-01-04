@@ -29,51 +29,17 @@ export default class BasicDatatable extends LightningElement {
     rowOffset = 0;
     draftValues = [];
 
-    handleSave(event) {
+    // handleSave(event) {
 
-        const fields = {};
-        fields[ID_FIELD.fieldApiName] = event.detail.draftValues[0].Id;
-        fields[Quantity_FIELD.fieldApiName] = event.detail.draftValues[0].Quantity__c;
-        fields[Price_FIELD.fieldApiName] = event.detail.draftValues[0].Price__c;
+    //     const fields = {};
+    //     fields[ID_FIELD.fieldApiName] = event.detail.draftValues[0].Id;
+    //     fields[Quantity_FIELD.fieldApiName] = event.detail.draftValues[0].Quantity__c;
+    //     fields[Price_FIELD.fieldApiName] = event.detail.draftValues[0].Price__c;
 
-        const recordInput = {fields};
+    //     const recordInput = {fields};
 
-        updateRecord(recordInput)
-        .then(() => {
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Success',
-                    message: 'ItemList updated',
-                    variant: 'success'
-                })
-            );
-            // Display fresh data in the datatable
-            return refreshApex(this.itemlist).then(() => {
-
-                // Clear all draft values in the datatable
-                this.draftValues = [];
-
-            });
-        }).catch(error => {
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Error creating record',
-                    message: error.body.message,
-                    variant: 'error'
-                })
-            );
-        });
-    }
-    // async handleSave(event) {
-    //     const updatedFields = event.detail.draftValues;
-        
-    //     // Prepare the record IDs for getRecordNotifyChange()
-    //     const notifyChangeIds = updatedFields.map(row => { return { "recordId": row.Id } });
-    
-    //    // Pass edited fields to the updateContacts Apex controller
-    //     await updateItemLists({data: updatedFields})
-    //     .then(result => {
-    //         console.log(JSON.stringify("Apex update result: "+ result));
+    //     updateRecord(recordInput)
+    //     .then(() => {
     //         this.dispatchEvent(
     //             new ShowToastEvent({
     //                 title: 'Success',
@@ -81,27 +47,61 @@ export default class BasicDatatable extends LightningElement {
     //                 variant: 'success'
     //             })
     //         );
-    
-    //     // Refresh LDS cache and wires
-    //     getRecordNotifyChange(notifyChangeIds);
-    
-    //     // Display fresh data in the datatable
-    //     refreshApex(this.itemlist).then(() => {
-    //         // Clear all draft values in the datatable
-    //         this.draftValues = [];
-    //     });
-    
-        
+    //         // Display fresh data in the datatable
+    //         return refreshApex(this.itemlist).then(() => {
+
+    //             // Clear all draft values in the datatable
+    //             this.draftValues = [];
+
+    //         });
     //     }).catch(error => {
     //         this.dispatchEvent(
     //             new ShowToastEvent({
-    //                 title: 'Error updating or refreshing records',
+    //                 title: 'Error creating record',
     //                 message: error.body.message,
     //                 variant: 'error'
     //             })
     //         );
     //     });
     // }
+    async handleSave(event) {
+        const updatedFields = event.detail.draftValues;
+        
+        // Prepare the record IDs for getRecordNotifyChange()
+        const notifyChangeIds = updatedFields.map(row => { return { "recordId": row.Id } });
+    
+       // Pass edited fields to the updateContacts Apex controller
+        await updateItemLists({data: updatedFields})
+        .then(result => {
+            console.log(JSON.stringify("Apex update result: "+ result));
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Success',
+                    message: 'ItemList updated',
+                    variant: 'success'
+                })
+            );
+    
+        // Refresh LDS cache and wires
+        getRecordNotifyChange(notifyChangeIds);
+    
+        // Display fresh data in the datatable
+        refreshApex(this.itemlist).then(() => {
+            // Clear all draft values in the datatable
+            this.draftValues = [];
+        });
+    
+        
+        }).catch(error => {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error updating or refreshing records',
+                    message: error.body.message,
+                    variant: 'error'
+                })
+            );
+        });
+    }
 
     async connectedCallback() {
 
